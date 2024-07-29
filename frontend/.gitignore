@@ -31,4 +31,4 @@ coverage
 *.tsbuildinfo
 
 _theme_files
-frontend/src/App.vue.bak
+App.vue.bak
