@@ -1,6 +1,7 @@
 <script setup>
 import logo from '@/assets/img/logo.png'
 import { RouterLink, useRoute } from 'vue-router'
+import store from '@/store'
 
 const isActiveLink = (routePath) => {
   const route = useRoute()
@@ -63,6 +64,20 @@ const isActiveLink = (routePath) => {
                 ]"
                 >Add Job</RouterLink
               >
+              <RouterLink
+                to="/login"
+                :class="[
+                  isActiveLink('/login')
+                    ? 'bg-green-900'
+                    : 'hover:bg-gray-900 hover:text-white',
+                  'text-white',
+                  'px-3',
+                  'py-2',
+                  'rounded-md',
+                ]"
+              >
+                Login
+              </RouterLink>
             </div>
           </div>
         </div>

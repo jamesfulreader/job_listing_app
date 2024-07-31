@@ -1,13 +1,15 @@
 <script setup>
 import axios from 'axios'
+import store from '@/store'
 import { reactive, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import BackButton from '@/components/BackButton.vue'
+import ManageComponent from '@/components/ManageComponent.vue'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 
 const route = useRoute()
 const jobId = route.params.id
-
+const isAuthenticated = store.getters.isAuthenticated
 const state = reactive({
   job: {},
   isLoading: true,
@@ -25,6 +27,7 @@ onMounted(async () => {
 })
 
 console.log(state)
+console.log(isAuthenticated)
 </script>
 
 <template>
@@ -91,19 +94,7 @@ console.log(state)
           </div>
 
           <!-- Manage -->
-          <div class="bg-white p-6 rounded-lg shadow-md mt-6">
-            <h3 class="text-xl font-bold mb-6">Manage Job</h3>
-            <a
-              href="add-job.html"
-              class="bg-green-500 hover:bg-green-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
-              >Edit Job</a
-            >
-            <button
-              class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
-            >
-              Delete Job
-            </button>
-          </div>
+          <ManageComponent v-if="isAuthenticated" />
         </aside>
       </div>
     </div>
