@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import generics, filters
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.models import User
 from .models import Company, Job
@@ -17,7 +17,7 @@ class CompanyListCreate(generics.ListCreateAPIView):
 
 class CompanyRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
   queryset = Company.objects.all()
-  permission_classes = [IsAuthenticated]
+  permission_classes = [IsAuthenticatedOrReadOnly]
   serializer_class = CompanySerializer
 
 class JobListCreate(generics.ListCreateAPIView):
@@ -32,7 +32,7 @@ class JobListCreate(generics.ListCreateAPIView):
 class JobRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
   queryset = Job.objects.all()
   serializer_class = JobSerializer
-  permission_classes = [IsAuthenticated]
+  permission_classes = [IsAuthenticatedOrReadOnly]
 
 class CreateUserView(generics.CreateAPIView):
   queryset = User.objects.all()

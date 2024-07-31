@@ -1,8 +1,11 @@
 <script setup>
 import axios from 'axios'
-import { ref, defineProps } from 'vue'
+import { ref, defineProps, onMounted } from 'vue'
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import JobListing from './JobListing.vue'
+
 const jobs = ref([])
+const isLoading = ref(true)
 
 const getJobs = async () => {
   const res = await axios.get('http://127.0.0.1:8000/api/jobs/')
@@ -10,7 +13,15 @@ const getJobs = async () => {
   jobs.value = data
 }
 
-getJobs()
+onMounted(() => {
+  try {
+    getJobs()
+  } catch (error) {
+    console.error('Error ', error.message)
+  } finally {
+    isLoading.value = false
+  }
+})
 
 defineProps({
   limit: Number,
@@ -27,7 +38,12 @@ defineProps({
       <h2 class="text-3xl font-bold text-green-500 mb-6 text-center">
         Browse Jobs
       </h2>
+      <!-- Show spinner while isLoading -->
+      <div v-if="isLoading" class="text-center text-gray-500 py-6">
+        <PulseLoader />
+      </div>
     </div>
+    <!-- Show job listing when done loading -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <JobListing
         v-for="job in jobs.slice(0, limit || jobs.length)"
