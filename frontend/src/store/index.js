@@ -7,6 +7,7 @@ export default new Vuex.Store({
     accessToken: null,
     refreshToken: null,
     user: null,
+    userId: null,
   },
   mutations: {
     setTokens(state, { access, refresh }) {
@@ -16,30 +17,37 @@ export default new Vuex.Store({
     setUser(state, user) {
       state.user = user
     },
+    setUserId(state, userId) {
+      state.userId = userId
+    },
     clearAuth(state) {
       state.accessToken = null
       state.refreshToken = null
       state.user = null
+      state.userId = null
     },
   },
   actions: {
     async login({ commit }, credentials) {
       try {
         const response = await api.post('/api/token/', credentials)
-        const { access, refresh } = response.data
+        const { access, refresh, user_id } = response.data
         commit('setTokens', { access, refresh })
+        commit('setUserId', user_id)
         Cookies.set('accessToken', access)
         Cookies.set('refreshToken', refresh)
-        await this.dispatch('fetchUser')
+        Cookies.set('userId', user_id)
+
+        await this.dispatch('fetchUser', user_id)
         return true
       } catch (error) {
         console.error('Login failed:', error)
         return false
       }
     },
-    async fetchUser({ commit, state }) {
+    async fetchUser({ commit, state }, userId) {
       try {
-        const response = await api.get('/api/user/', {
+        const response = await api.get(`/api/user/${userId}`, {
           headers: { Authorization: `Bearer ${state.accessToken}` },
         })
         commit('setUser', response.data)
@@ -51,6 +59,7 @@ export default new Vuex.Store({
       commit('clearAuth')
       Cookies.remove('accessToken')
       Cookies.remove('refreshToken')
+      Cookies.remove('userId')
     },
     async refreshToken({ commit, state }) {
       try {
