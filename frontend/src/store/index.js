@@ -8,6 +8,7 @@ export default new Vuex.Store({
     refreshToken: null,
     user: null,
     userId: null,
+    isAuthenticated: false,
   },
   mutations: {
     setTokens(state, { access, refresh }) {
@@ -20,20 +21,25 @@ export default new Vuex.Store({
     setUserId(state, userId) {
       state.userId = userId
     },
+    setAuthentication(state, status) {
+      state.isAuthenticated = status
+    },
     clearAuth(state) {
       state.accessToken = null
       state.refreshToken = null
       state.user = null
       state.userId = null
+      state.isAuthenticated = false
     },
   },
   actions: {
     async login({ commit }, credentials) {
       try {
-        const response = await api.post('/api/token/', credentials)
+        const response = await api.post('/token/', credentials)
         const { access, refresh, user_id } = response.data
         commit('setTokens', { access, refresh })
         commit('setUserId', user_id)
+        commit('setAuthentication', true)
         Cookies.set('accessToken', access)
         Cookies.set('refreshToken', refresh)
         Cookies.set('userId', user_id)
@@ -47,9 +53,7 @@ export default new Vuex.Store({
     },
     async fetchUser({ commit, state }, userId) {
       try {
-        const response = await api.get(`/api/user/${userId}`, {
-          headers: { Authorization: `Bearer ${state.accessToken}` },
-        })
+        const response = await api.get(`/user/${userId}`)
         commit('setUser', response.data)
       } catch (error) {
         console.error('Failed to fetch user:', error)
@@ -63,7 +67,7 @@ export default new Vuex.Store({
     },
     async refreshToken({ commit, state }) {
       try {
-        const response = await api.post('/api/token/refresh/', {
+        const response = await api.post('/token/refresh/', {
           refresh: state.refreshToken,
         })
         const { access } = response.data
@@ -77,6 +81,7 @@ export default new Vuex.Store({
     },
   },
   getters: {
-    isAuthenticated: (state) => !!state.accessToken,
+    isAuthenticated: (state) => state.isAuthenticated,
+    user: (state) => state.user,
   },
 })

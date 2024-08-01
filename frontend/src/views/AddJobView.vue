@@ -1,45 +1,43 @@
 <script setup>
 import router from '@/router'
-import { reactive } from 'vue'
+import { reactive, onMounted, ref } from 'vue'
 // import { useToast } from 'vue-toastification'
-// import axios from 'axios'
+import axios from 'axios'
 import api from '@/services/api'
 
+const companies = ref([])
+
 const form = reactive({
-  type: 'Full-Time',
+  position_type: 'Full-Time',
   title: '',
   description: '',
   salary_min: '',
   salary_max: '',
   location: '',
-  company: {
-    name: '',
-    description: '',
-    contact_email: '',
-    contact_phone: '',
-  },
+  company: {},
 })
 
+onMounted(async () => {
+  try {
+    const res = await axios.get('/api/companies/')
+    companies.value = res.data
+  } catch (error) {}
+})
 // const toast = useToast()
 
 const handleSubmit = async () => {
   const newJob = {
     title: form.title,
-    type: form.type,
+    position_type: form.position_type,
     location: form.location,
     description: form.description,
     salary_min: form.salary_min,
     salary_max: form.salary_max,
-    company: {
-      name: form.company.name,
-      description: form.company.description,
-      contact_email: form.company.contact_email,
-      contact_phone: form.company.contact_phone,
-    },
+    company_id: form.company.id,
   }
-
+  console.log(newJob)
   try {
-    const response = await api.post('/api/jobs/', newJob)
+    const response = await api.post('/jobs/', newJob)
     // toast.success('Job Added Successfully')
     router.push(`/jobs/${response.data.id}`)
   } catch (error) {
@@ -63,7 +61,7 @@ const handleSubmit = async () => {
               >Job Type</label
             >
             <select
-              v-model="form.type"
+              v-model="form.position_type"
               id="type"
               name="type"
               class="border rounded w-full py-2 px-3"
@@ -71,8 +69,7 @@ const handleSubmit = async () => {
             >
               <option value="Full-Time">Full-Time</option>
               <option value="Part-Time">Part-Time</option>
-              <option value="Remote">Remote</option>
-              <option value="Internship">Internship</option>
+              <option value="Remote">Contract</option>
             </select>
           </div>
 
@@ -108,50 +105,30 @@ const handleSubmit = async () => {
             <label for="type" class="block text-gray-700 font-bold mb-2"
               >Salary Min</label
             >
-            <select
-              id="salary"
-              v-model="form.salary_min"
-              name="salary"
+            <input
+              type="number"
+              name="salary_min"
+              id="salary_min"
               class="border rounded w-full py-2 px-3"
-              required
-            >
-              <option value="Under $50K">under $50K</option>
-              <option value="$50K - $60K">$50 - $60K</option>
-              <option value="$60K - $70K">$60 - $70K</option>
-              <option value="$70K - $80K">$70 - $80K</option>
-              <option value="$80K - $90K">$80 - $90K</option>
-              <option value="$90K - $100K">$90 - $100K</option>
-              <option value="$100K - $125K">$100 - $125K</option>
-              <option value="$125K - $150K">$125 - $150K</option>
-              <option value="$150K - $175K">$150 - $175K</option>
-              <option value="$175K - $200K">$175 - $200K</option>
-              <option value="Over $200K">Over $200K</option>
-            </select>
+              min="0.00"
+              step="0.01"
+              v-model="form.salary_min"
+            />
           </div>
 
           <div class="mb-4">
             <label for="type" class="block text-gray-700 font-bold mb-2"
               >Salary Max</label
             >
-            <select
-              id="salary"
-              v-model="form.salary_max"
-              name="salary"
+            <input
+              type="number"
+              name="salary_max"
+              id="salary_max"
               class="border rounded w-full py-2 px-3"
-              required
-            >
-              <option value="Under $50K">under $50K</option>
-              <option value="$50K - $60K">$50 - $60K</option>
-              <option value="$60K - $70K">$60 - $70K</option>
-              <option value="$70K - $80K">$70 - $80K</option>
-              <option value="$80K - $90K">$80 - $90K</option>
-              <option value="$90K - $100K">$90 - $100K</option>
-              <option value="$100K - $125K">$100 - $125K</option>
-              <option value="$125K - $150K">$125 - $150K</option>
-              <option value="$150K - $175K">$150 - $175K</option>
-              <option value="$175K - $200K">$175 - $200K</option>
-              <option value="Over $200K">Over $200K</option>
-            </select>
+              min="0.00"
+              step="0.01"
+              v-model="form.salary_max"
+            />
           </div>
 
           <div class="mb-4">
@@ -167,67 +144,20 @@ const handleSubmit = async () => {
             />
           </div>
 
-          <h3 class="text-2xl mb-5">Company Info</h3>
-
           <div class="mb-4">
-            <label for="company" class="block text-gray-700 font-bold mb-2"
-              >Company Name</label
+            <label class="block text-gray-700 font-bold mb-2" for="company"
+              >Select a company</label
             >
+            <label v-for="company in companies" :for="company.name">{{
+              company.name
+            }}</label>
             <input
-              type="text"
-              v-model="form.company.name"
-              id="company"
-              name="company"
-              class="border rounded w-full py-2 px-3"
-              placeholder="Company Name"
-            />
-          </div>
-
-          <div class="mb-4">
-            <label
-              for="company_description"
-              class="block text-gray-700 font-bold mb-2"
-              >Company Description</label
-            >
-            <textarea
-              id="company_description"
-              v-model="form.company.description"
-              name="company_description"
-              class="border rounded w-full py-2 px-3"
-              rows="4"
-              placeholder="What does your company do?"
-            ></textarea>
-          </div>
-
-          <div class="mb-4">
-            <label
-              for="contact_email"
-              class="block text-gray-700 font-bold mb-2"
-              >Contact Email</label
-            >
-            <input
-              type="email"
-              v-model="form.company.contact_email"
-              id="contact_email"
-              name="contact_email"
-              class="border rounded w-full py-2 px-3"
-              placeholder="Email address for applicants"
-              required
-            />
-          </div>
-          <div class="mb-4">
-            <label
-              for="contact_phone"
-              class="block text-gray-700 font-bold mb-2"
-              >Contact Phone</label
-            >
-            <input
-              type="tel"
-              v-model="form.company.contactPhone"
-              id="contact_phone"
-              name="contact_phone"
-              class="border rounded w-full py-2 px-3"
-              placeholder="Optional phone for applicants"
+              v-model="form.company"
+              class="my-auto"
+              v-for="company in companies"
+              type="radio"
+              :name="company.name"
+              :value="company"
             />
           </div>
 

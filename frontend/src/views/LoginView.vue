@@ -14,7 +14,7 @@ const handleLogin = async () => {
     password: password.value,
   })
   if (success) {
-    console.log('Login success')
+    // console.log('Login success')
     router.push({ name: 'home' })
   } else {
     console.error('login failed')

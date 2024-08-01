@@ -45,10 +45,14 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach(async (to, from) => {
-  const signedIn = store.getters.isAuthenticated
-  if (to.meta.requiresAuth && !signedIn) {
-    return { name: 'login' }
+router.beforeEach(async (to, from, next) => {
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
+  const isAuthenticated = store.getters.isAuthenticated
+
+  if (requiresAuth && !isAuthenticated) {
+    next({ name: 'login' })
+  } else {
+    next()
   }
 })
 
