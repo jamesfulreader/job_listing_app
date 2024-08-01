@@ -8,7 +8,7 @@ const jobs = ref([])
 const isLoading = ref(true)
 
 const getJobs = async () => {
-  const res = await axios.get('http://127.0.0.1:8000/api/jobs/')
+  const res = await axios.get('/api/jobs/')
   const data = await res.data
   jobs.value = data
 }

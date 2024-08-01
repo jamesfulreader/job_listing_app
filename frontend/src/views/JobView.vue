@@ -17,7 +17,7 @@ const state = reactive({
 
 onMounted(async () => {
   try {
-    const res = await axios.get(`http://localhost:8000/api/jobs/${jobId}/`)
+    const res = await axios.get(`/api/jobs/${jobId}/`)
     state.job = res.data
   } catch (error) {
     console.error('Error ', error.message)
@@ -25,9 +25,6 @@ onMounted(async () => {
     state.isLoading = false
   }
 })
-
-console.log(state)
-console.log(isAuthenticated)
 </script>
 
 <template>

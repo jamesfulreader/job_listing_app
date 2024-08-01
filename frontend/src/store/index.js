@@ -30,7 +30,7 @@ export default new Vuex.Store({
         commit('setTokens', { access, refresh })
         Cookies.set('accessToken', access)
         Cookies.set('refreshToken', refresh)
-        await commit('fetchUser')
+        await this.dispatch('fetchUser')
         return true
       } catch (error) {
         console.error('Login failed:', error)
