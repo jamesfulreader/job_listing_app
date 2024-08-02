@@ -1,6 +1,6 @@
 <script setup>
 import axios from 'axios'
-import { ref, defineProps, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import JobListing from './JobListing.vue'
 
