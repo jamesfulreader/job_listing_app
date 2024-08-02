@@ -91,7 +91,7 @@ onMounted(async () => {
           </div>
 
           <!-- Manage -->
-          <ManageComponent v-if="isAuthenticated" />
+          <ManageComponent v-if="isAuthenticated" :jobId="jobId" />
         </aside>
       </div>
     </div>

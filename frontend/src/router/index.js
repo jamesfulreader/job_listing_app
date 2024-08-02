@@ -5,6 +5,7 @@ import NotFoundView from '@/views/NotFoundView.vue'
 import JobView from '@/views/JobView.vue'
 import LoginView from '@/views/LoginView.vue'
 import AddJobView from '@/views/AddJobView.vue'
+import EditJobView from '@/views/EditJobView.vue'
 
 import store from '@/store'
 
@@ -25,6 +26,12 @@ const router = createRouter({
       path: '/jobs/:id',
       name: 'job',
       component: JobView,
+    },
+    {
+      path: '/jobs/edit/:id',
+      name: 'edit-job',
+      component: EditJobView,
+      meta: { requiresAuth: true },
     },
     {
       path: '/jobs/add',
