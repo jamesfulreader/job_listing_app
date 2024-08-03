@@ -6,6 +6,7 @@ import JobView from '@/views/JobView.vue'
 import LoginView from '@/views/LoginView.vue'
 import AddJobView from '@/views/AddJobView.vue'
 import EditJobView from '@/views/EditJobView.vue'
+import RegisterView from '@/views/RegisterView.vue'
 
 import store from '@/store'
 
@@ -38,6 +39,11 @@ const router = createRouter({
       name: 'add-job',
       component: AddJobView,
       meta: { requiresAuth: true },
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterView,
     },
     {
       path: '/login',

@@ -33,6 +33,22 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    async register({ commit }, credentials) {
+      try {
+        const response = await api.post('/user/register/', credentials)
+        const { access, refresh, user_id } = response.data
+        commit('setTokens', { access, refresh })
+        commit('setUserId', user_id)
+        commit('setAuthentication', true)
+        Cookies.set('accessToken', access)
+        Cookies.set('refreshToken', refresh)
+        Cookies.set('userId', user_id)
+        await this.dispatch('fetchUser', user_id)
+        return true
+      } catch (error) {
+        console.error('Registration failed: ', error)
+      }
+    },
     async login({ commit }, credentials) {
       try {
         const response = await api.post('/token/', credentials)
