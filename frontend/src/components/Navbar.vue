@@ -35,7 +35,7 @@ const handleLogout = async () => {
           <RouterLink class="flex flex-shrink-0 items-center mr-4" to="/">
             <img class="h-10 w-auto" :src="logo" alt="Vue Jobs" />
             <span class="hidden md:block text-white text-2xl font-bold ml-2"
-              >Vue Jobs</span
+              >Job Listing</span
             >
           </RouterLink>
           <div class="md:ml-auto">

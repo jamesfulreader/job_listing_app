@@ -2,11 +2,11 @@
 defineProps({
   title: {
     type: String,
-    default: 'Become a vue dev',
+    default: 'Get Hired',
   },
   subtitle: {
     type: String,
-    default: 'Find the Vue job that fits your skills and needs',
+    default: 'Find the job that fits your skills and needs',
   },
 })
 </script>
