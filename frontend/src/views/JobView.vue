@@ -1,15 +1,18 @@
 <script setup>
 import axios from 'axios'
-import store from '@/store'
-import { reactive, onMounted } from 'vue'
+import { reactive, onMounted, computed } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import BackButton from '@/components/BackButton.vue'
 import ManageComponent from '@/components/ManageComponent.vue'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
+import { useStore } from 'vuex'
 
 const route = useRoute()
 const jobId = route.params.id
-const isAuthenticated = store.getters.isAuthenticated
+const store = useStore()
+const isAuthenticated = computed(() => {
+  store.getters.isAuthenticated
+})
 const state = reactive({
   job: {},
   isLoading: true,
