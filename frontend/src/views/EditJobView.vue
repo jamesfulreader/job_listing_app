@@ -25,7 +25,7 @@ const state = reactive({
 const handleSubmit = async () => {
   const updatedJob = {
     title: form.title,
-    type: form.position_typetype,
+    position_type: form.position_type,
     location: form.location,
     description: form.description,
     salary_min: form.salary_min,

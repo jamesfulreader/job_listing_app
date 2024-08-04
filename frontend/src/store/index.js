@@ -1,6 +1,7 @@
 import Vuex from 'vuex'
 import Cookies from 'js-cookie'
 import api from '@/services/api'
+import axios from 'axios'
 
 export default new Vuex.Store({
   state: {
@@ -75,11 +76,16 @@ export default new Vuex.Store({
         console.error('Failed to fetch user:', error)
       }
     },
-    logout({ commit }) {
-      commit('clearAuth')
-      Cookies.remove('accessToken')
-      Cookies.remove('refreshToken')
-      Cookies.remove('userId')
+    async logout({ commit }) {
+      try {
+        delete axios.defaults.headers.common['Authorization']
+        commit('clearAuth')
+        Cookies.remove('accessToken')
+        Cookies.remove('refreshToken')
+        Cookies.remove('userId')
+      } catch (error) {
+        console.error('logout failed: ', error)
+      }
     },
     async refreshToken({ commit, state }) {
       try {

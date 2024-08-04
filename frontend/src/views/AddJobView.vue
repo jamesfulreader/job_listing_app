@@ -148,19 +148,29 @@ const handleSubmit = async () => {
             <label class="block text-gray-700 font-bold mb-2" for="company"
               >Select a company</label
             >
-            <label v-for="company in companies" :for="company.name">{{
-              company.name
-            }}</label>
-            <input
-              v-model="form.company"
-              class="my-auto"
-              v-for="company in companies"
-              type="radio"
-              :name="company.name"
-              :value="company"
-            />
+            <div class="space-y-2">
+              <div
+                v-for="company in companies"
+                :key="company.name"
+                class="flex items-center"
+              >
+                <input
+                  v-model="form.company"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  type="radio"
+                  :id="company.name"
+                  :name="company.name"
+                  :value="company"
+                />
+                <label
+                  class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  :for="company.name"
+                >
+                  {{ company.name }}
+                </label>
+              </div>
+            </div>
           </div>
-
           <div>
             <button
               class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"

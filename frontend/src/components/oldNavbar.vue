@@ -1,26 +1,21 @@
 <script setup>
 import logo from '@/assets/img/logo.png'
-import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { computed } from 'vue'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
 const store = useStore()
 const router = useRouter()
+
+const isAuthenticated = computed(() => store.getters.isAuthenticated)
 
 const isActiveLink = (routePath) => {
   const route = useRoute()
   return route.path === routePath
 }
 
-const isAuthenticated = computed(() => store.state.isAuthenticated)
-
 const handleLogout = async () => {
-  try {
-    await store.dispatch('logout')
-    router.push('/login')
-  } catch (error) {
-    console.error('Logout failed', error)
-  }
+  await store.dispatch('logout')
 }
 </script>
 
@@ -67,7 +62,6 @@ const handleLogout = async () => {
                 >Jobs</RouterLink
               >
               <RouterLink
-                v-if="isAuthenticated"
                 to="/jobs/add"
                 :class="[
                   isActiveLink('/jobs/add')
@@ -81,7 +75,6 @@ const handleLogout = async () => {
                 >Add Job</RouterLink
               >
               <RouterLink
-                v-if="!isAuthenticated"
                 to="/register"
                 :class="[
                   isActiveLink('/register')
@@ -96,7 +89,6 @@ const handleLogout = async () => {
                 Register
               </RouterLink>
               <RouterLink
-                v-if="!isAuthenticated"
                 to="/login"
                 :class="[
                   isActiveLink('/login')
@@ -110,13 +102,6 @@ const handleLogout = async () => {
               >
                 Login
               </RouterLink>
-              <button
-                v-if="isAuthenticated"
-                @click="handleLogout"
-                class="text-white px-3 py-2 rounded-md hover:bg-gray-900 hover:text-white"
-              >
-                Logout
-              </button>
             </div>
           </div>
         </div>
