@@ -11,7 +11,7 @@ const route = useRoute()
 const jobId = route.params.id
 const store = useStore()
 const isAuthenticated = computed(() => {
-  store.getters.isAuthenticated
+  return store.getters.isAuthenticated
 })
 const state = reactive({
   job: {},
